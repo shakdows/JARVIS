@@ -8,6 +8,7 @@ Al arrancar se verifica con `claude --help` que el flag --print exista
 de verdad, en vez de asumirlo.
 """
 
+import os
 import shutil
 import subprocess
 import sys
@@ -17,6 +18,22 @@ import config
 
 class CerebroNoDisponible(Exception):
     pass
+
+
+def encontrar_claude():
+    """Busca el ejecutable de Claude Code aunque no esté en el PATH."""
+    ruta = shutil.which("claude")
+    if ruta:
+        return ruta
+    if sys.platform == "win32":
+        candidatos = [
+            os.path.expandvars(r"%USERPROFILE%\.local\bin\claude.exe"),
+            os.path.expandvars(r"%LOCALAPPDATA%\Programs\claude\claude.exe"),
+        ]
+        for candidato in candidatos:
+            if os.path.isfile(candidato):
+                return candidato
+    return None
 
 
 def _armar_prompt(texto):
@@ -38,7 +55,7 @@ def _armar_prompt(texto):
 
 class Cerebro:
     def __init__(self):
-        self.ruta = shutil.which("claude")
+        self.ruta = encontrar_claude()
         if not self.ruta:
             raise CerebroNoDisponible(
                 "no encontré el comando 'claude'. Instala Claude Code en esta "

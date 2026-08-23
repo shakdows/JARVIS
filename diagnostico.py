@@ -112,9 +112,9 @@ def chequear_dependencias():
 
 def chequear_cerebro():
     """Verifica el CLI de Claude Code para el modo comando (F10)."""
-    import shutil
+    from cerebro import encontrar_claude
 
-    ruta = shutil.which("claude")
+    ruta = encontrar_claude()
     if not ruta:
         print(f"{AVISO} No encontré el comando 'claude': el modo comando (F10) no va a funcionar")
         print("      Instala Claude Code (https://claude.com/claude-code) e inicia sesión una vez.")
