@@ -3,8 +3,17 @@
 Asistente de voz personal, 100 % local: el audio nunca sale de tu máquina.
 Se construye por fases (ver `ESPECIFICACION.md`).
 
-**Fase actual: 1 — Dictado global.**
-Mantienes **F9**, hablas, la sueltas, y el texto se pega donde tengas el cursor.
+**Fases activas:**
+
+- **Fase 1 — Dictado (F9):** mantienes F9, hablas, la sueltas, y el texto se
+  pega donde tengas el cursor.
+- **Fase 2 — Comandos (F10):** mantienes F10, le pides algo ("abre VS Code",
+  "¿qué es Supabase?"), y JARVIS actúa y te contesta con voz. **Esc** lo calla
+  a media frase.
+
+El modo comando usa el CLI de Claude Code que ya tienes en tu máquina
+(reutiliza tu sesión, sin claves de API). Si no lo tienes instalado, F10 se
+desactiva solo y el dictado sigue funcionando.
 
 ---
 
@@ -38,6 +47,14 @@ Cuando diga "Listo":
 El pegado va por portapapeles (Ctrl+V), así que salen bien las ñ y las
 tildes aunque el teclado físico no las tenga. Tu portapapeles anterior se
 restaura solo después de pegar.
+
+Para darle una orden: mantén **F10**, habla ("abre el bloc de notas",
+"abre YouTube", "explícame qué es un endpoint"), y suéltala. Te contesta
+hablado; si la respuesta es larga, lee un resumen y deja el texto completo
+en el portapapeles. **Esc** corta la voz.
+
+Las aplicaciones que sabe abrir están en `config.py` (`APLICACIONES`) —
+agrega ahí las tuyas con la ruta de su ejecutable.
 
 Para salir: **Ctrl+C** en la consola de JARVIS.
 

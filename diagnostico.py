@@ -110,6 +110,53 @@ def chequear_dependencias():
         print(f"{OK} Todas las dependencias instaladas")
 
 
+def chequear_cerebro():
+    """Verifica el CLI de Claude Code para el modo comando (F10)."""
+    import shutil
+
+    ruta = shutil.which("claude")
+    if not ruta:
+        print(f"{AVISO} No encontré el comando 'claude': el modo comando (F10) no va a funcionar")
+        print("      Instala Claude Code (https://claude.com/claude-code) e inicia sesión una vez.")
+        return
+    try:
+        salida = subprocess.run(
+            [ruta, "--help"], capture_output=True, text=True, timeout=30,
+            encoding="utf-8", errors="replace",
+        )
+        if "--print" in (salida.stdout or ""):
+            print(f"{OK} CLI de Claude Code listo (modo --print disponible): {ruta}")
+        else:
+            print(f"{AVISO} 'claude' existe pero no veo el modo --print; actualiza Claude Code")
+    except Exception as error:
+        print(f"{MAL} 'claude --help' falló: {error}")
+
+
+def chequear_voz():
+    """Verifica pyttsx3 y busca una voz en español de Windows."""
+    if sys.platform != "win32":
+        return
+    try:
+        import pyttsx3
+
+        motor = pyttsx3.init()
+        voces = motor.getProperty("voices")
+        en_espanol = [
+            v.name for v in voces
+            if "spanish" in f"{v.id} {v.name}".lower()
+            or "es-" in f"{v.id} {v.name}".lower()
+            or "es_" in f"{v.id} {v.name}".lower()
+        ]
+        if en_espanol:
+            print(f"{OK} Voz en español disponible: {en_espanol[0]}")
+        else:
+            nombres = ", ".join(v.name for v in voces[:5])
+            print(f"{AVISO} No hay voz en español instalada; se usará la primera disponible ({nombres})")
+            print("      Puedes agregar una en Configuración → Hora e idioma → Voz")
+    except Exception as error:
+        print(f"{MAL} pyttsx3 no funcionó: {error}")
+
+
 def chequear_modelo():
     print()
     print("Cargando el modelo Whisper (la primera vez se descarga, ten paciencia)...")
@@ -130,6 +177,8 @@ def main():
     chequear_dlls_cuda()
     chequear_microfono()
     chequear_dependencias()
+    chequear_cerebro()
+    chequear_voz()
     if "--modelo" in sys.argv:
         chequear_modelo()
     else:

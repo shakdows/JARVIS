@@ -11,7 +11,7 @@ cd /d "%~dp0"
 set "RAMA=claude/jarvis-voice-assistant-7sh10d"
 set "BASE=https://raw.githubusercontent.com/shakdows/JARVIS/%RAMA%"
 
-for %%F in (config.py jarvis.py transcriptor.py grabadora.py portapapeles.py sonidos.py diagnostico.py requirements.txt instalar.bat README.md ESPECIFICACION.md) do (
+for %%F in (config.py jarvis.py transcriptor.py grabadora.py portapapeles.py sonidos.py voz.py cerebro.py herramientas.py diagnostico.py requirements.txt instalar.bat README.md ESPECIFICACION.md) do (
   echo Descargando %%F ...
   curl -sSL -o "%%F" "%BASE%/%%F"
   if errorlevel 1 echo [X] No pude descargar %%F

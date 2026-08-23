@@ -3,6 +3,7 @@ numpy
 sounddevice
 keyboard
 pyperclip
+pyttsx3
 
 # DLLs de CUDA que faster-whisper (ctranslate2) necesita en Windows.
 # Se instalan dentro del venv; transcriptor.py expone sus rutas
