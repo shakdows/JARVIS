@@ -18,13 +18,25 @@ import config
 
 
 def _preparar_dlls_cuda():
+    # La estructura interna de los paquetes de NVIDIA cambia entre
+    # versiones, así que se busca cualquier carpeta que contenga DLLs
+    # bajo site-packages/nvidia en vez de asumir una ruta fija.
     if sys.platform != "win32":
         return
     base = Path(sys.prefix) / "Lib" / "site-packages" / "nvidia"
     if not base.is_dir():
         return
-    for carpeta in sorted(base.glob("*/bin")):
+    carpetas = sorted({dll.parent for dll in base.rglob("*.dll")})
+    for carpeta in carpetas:
         os.add_dll_directory(str(carpeta))
+    # Refuerzo vía PATH: algunas DLLs se cargan por dependencia indirecta
+    # y Windows solo las resuelve buscando en PATH.
+    if carpetas:
+        os.environ["PATH"] = (
+            os.pathsep.join(str(c) for c in carpetas)
+            + os.pathsep
+            + os.environ.get("PATH", "")
+        )
 
 
 _preparar_dlls_cuda()

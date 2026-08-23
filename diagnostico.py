@@ -45,6 +45,36 @@ def chequear_gpu():
     print(f"{OK} GPU: {salida.stdout.strip()}")
 
 
+def chequear_dlls_cuda():
+    """Verifica que las DLLs de cuBLAS/cuDNN estén instaladas en el venv."""
+    if sys.platform != "win32":
+        return
+    from pathlib import Path
+
+    base = Path(sys.prefix) / "Lib" / "site-packages" / "nvidia"
+    if not base.is_dir():
+        print(f"{MAL} Faltan los paquetes CUDA de pip (no existe {base})")
+        print("      Corre: venv\\Scripts\\python -m pip install -r requirements.txt")
+        return
+    dlls = list(base.rglob("*.dll"))
+    cublas = next((d for d in dlls if d.name.lower().startswith("cublas64")), None)
+    cudnn = next((d for d in dlls if d.name.lower().startswith("cudnn64")), None)
+    if cublas:
+        print(f"{OK} cuBLAS: {cublas}")
+    else:
+        print(f"{MAL} No encontré cublas64_*.dll dentro de {base}")
+    if cudnn:
+        print(f"{OK} cuDNN: {cudnn}")
+    else:
+        print(f"{MAL} No encontré cudnn64_*.dll dentro de {base}")
+    if not cublas or not cudnn:
+        print("      Corre: venv\\Scripts\\python -m pip install -r requirements.txt")
+        if dlls:
+            print("      DLLs que sí están:")
+            for d in dlls[:20]:
+                print(f"        {d.relative_to(base)}")
+
+
 def chequear_microfono():
     try:
         import sounddevice as sd
@@ -97,6 +127,7 @@ def main():
     print("-" * 40)
     chequear_python()
     chequear_gpu()
+    chequear_dlls_cuda()
     chequear_microfono()
     chequear_dependencias()
     if "--modelo" in sys.argv:

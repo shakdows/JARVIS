@@ -41,6 +41,11 @@ restaura solo después de pegar.
 
 Para salir: **Ctrl+C** en la consola de JARVIS.
 
+## Actualizar a la última versión
+
+Doble clic en **`actualizar.bat`**. Descarga los archivos nuevos del
+repositorio y actualiza las dependencias, sin tocar el `venv` ni tus datos.
+
 ## Ajustes
 
 Todo se cambia en **`config.py`**: la tecla, el modelo (`small` → `medium`
