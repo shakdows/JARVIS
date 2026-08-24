@@ -1,5 +1,6 @@
 # Lista de archivos del proyecto que actualizar.bat descarga.
 # Una linea por archivo. Las lineas con # se ignoran.
+JARVIS.bat
 config.py
 jarvis.py
 transcriptor.py

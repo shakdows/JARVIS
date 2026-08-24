@@ -34,9 +34,8 @@ desactiva solo y el dictado sigue funcionando.
 
 ## Uso diario
 
-```
-venv\Scripts\python jarvis.py
-```
+Doble clic en **`JARVIS.bat`** (o, desde una consola en la carpeta,
+`venv\Scripts\python jarvis.py`).
 
 Cuando diga "Listo":
 
